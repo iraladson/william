@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Kinetic Blobs - js do it</title>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="dist/physics.js"></script>
+
+<style type="text/css">
+#test 
+{
+ background-color: #DDDDDD;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="test" width="800" height="600"></canvas>
+<script>
+$(function() {
+
+  var canvas = document.getElementById('test');
+  var ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    return;
+  }
+
+  ctx.fillStyle = '#333';
+
+// obj setting 
+
+    function Particle(vec){ 
+
+  	var x = Math.random()*canvas.width;
+  	var y = Math.random()*canvas.height;
+  	
+    this.vec = {x : vec[0], y : vec[1]};
+    
+    var age = 10 + this.vec.y;
+    var mass = 10 + this.vec.y;
+
+  	var color;
+    if(vec.x > 0)color='green';
+    if(vec.x<0)color='blue';
+  
+    //this.func => can be called out side of obj
+  	this.display = function(){
+  	ctx.fillStyle = color;	
+  	ctx.beginPath();
+    ctx.arc(x, y, rad, 0, Math.PI * 2, false);
+    ctx.fill();
+  	}
+  	this.move = function(){}
+  	this.label = function(word){}
+
+    //this.p = physics.makeParticle(mass, x,y);
+    //particles.push(this);
+    var p = physics.makeParticle(mass, x,y);
+    particles.push(p);
+  }
+// the agent
+   function Agent(){ 
+
+    var x = Math.random()*canvas.width;
+    var y = Math.random()*canvas.height;
+
+    this.stuff = "hey";
+    
+    var age = 50;
+    var mass = 50
+    var color = 'red';
+    
+    this.display = function(){
+    ctx.fillStyle = color;  
+    ctx.beginPath();
+    ctx.arc(x, y, rad, 0, Math.PI * 2, false);
+    ctx.fill();
+    }
+    this.move = function(){}
+
+    //this.p = physics.makeParticle(mass, x,y);
+    //particles.push(this);
+    var p = physics.makeParticle(mass, x,y);
+    particles.push(p);
+
+  }
+
+//
+  var particles = [];
+  var gravity = 0.001;
+  var drag = 0.1;
+  var physics = new Physics(gravity,drag);
+
+  var particlesize = [];
+  var strength = 500;
+  var minDistance = canvas.width;
+ 
+ //adding agent
+  var agent = new Agent();
+  //console.log(agent.getX());
+ 
+ //adding particles 
+  var particle = new Particle([3,3]);
+  var particle2 = new Particle([4,5]);
+  var particle3 = new Particle([2,-5]);
+  
+  for(var i = 0; i < particles.length -1; i++){
+    console.log(particles[0]);
+    var attraction = physics.makeAttraction(particles[0],particles[i+1], strength, minDistance);
+ }
+  
+
+  var render = function() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	 for (var i =0; i < particles.length; i++){
+       // var p = particles[i];
+
+      var p = particles[i];
+      var position = p.position;
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(position.x, position.y, p.mass, 0, Math.PI * 2, false);
+      ctx.fill();
+	   }
+
+
+  };
+    
+  physics.onUpdate(render).play();
+
+  render();
+
+  // Bind canvas click to toggle.
+  canvas.onclick = function(e) {
+    physics.toggle(); // Toggle between play and paused states.
+  };
+  console.log(particles[1]);
+  canvas.physics = physics;
+
+});
+
+</script>
+
+</body>
+</html>

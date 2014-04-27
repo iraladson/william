@@ -1,0 +1,103 @@
+<head>
+	<script src="lexicon.js_"></script>
+	<script src="lexer.js"></script>
+	<script src="POSTagger.js"></script>
+	<script src="physics.js"></script>
+	<script src="emoapp.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+
+	<style type="text/css">
+		#test 
+		{
+		 background-color: #DDDDDD;
+		}
+	</style>
+</head>
+<body>
+
+<canvas id="test" width="800" height="600"></canvas>
+
+<center> Talk to the agent </center>
+<br><center><input type="text" name="input" id = "input"></center><br>
+<center><a onClick = "go();" href="javascript:void(0);" title="test">Submit</a></center>
+
+
+<script src="particle.js"></script>
+
+<script>
+//canvas
+var canvas = document.getElementById('test');
+var ctx = canvas.getContext('2d');
+
+if (!ctx) {
+return;
+}
+
+ctx.fillStyle = '#333';
+
+var particles = [];
+var gravity = 0.001;
+var drag = 0.1;
+var physics = new Physics(gravity,drag);
+
+var particlesize = [];
+var strength = 1000;
+var minDistance = canvas.width;
+
+//grab agent
+//var particle = new Particle();
+//var particle2 = new Particle();
+//var particle3 = new Particle();
+
+//STRENGTH BASED ON DESIRE; called each turn
+for(var i = 0; i < particles.length -1; i++){
+    var attraction = physics.makeAttraction(particles[0],particles[i+1], strength, minDistance);
+ }
+
+ //EVENTS
+ // Bind canvas click to toggle.
+canvas.onkeypress = function(e) {
+  //console.log(e);
+    if(e.keyCode == 32)
+    physics.toggle(); // Toggle between play and paused states.
+};
+
+  //canvas.physics = physics;
+ 	var model = new EMOAPP.Core()
+	var belief = new EMOAPP.Belief();
+	var intent = new EMOAPP.Intention();
+
+	model.addComponent(intent);
+	model.addComponent(belief);
+	model.linkComponents();
+
+function go(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	//grab sentence
+	var text = document.getElementById("input").value;
+
+	var obj = {};
+	obj.sentiment = getSentiment(text);
+	obj.sentence = text;
+
+	belief.update(obj);
+	intent.update(obj);
+
+	var affect = model.process();
+
+	var agent = new Agent(affect.mood);
+
+	for(var i = 0; i < particles.length -1; i++){
+    	var attraction = physics.makeAttraction(particles[0],particles[i+1], 1000 * affect.mood[1], minDistance);
+ 	}
+	//var agent = new Agent([-5,-5]);
+	console.log(text);
+	//new Agent
+ physics.onUpdate(render).play();
+
+ render();
+}
+
+
+</script>
+</body>
