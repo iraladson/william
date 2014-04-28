@@ -1,11 +1,9 @@
 #William
 
 ##Resources
-Brannon Message Object
+Brannon Message Object w/ ammendments: sentiment => emoapp, intent, subject/verb/object, stopWord-free
 
-  Ammendments: sentiment => emoapp, intent, subject/verb/object, stopWord-free
-
-N-Grams. 
+n-grams
 
 Neural Net
 
@@ -20,8 +18,6 @@ Neural Net
 
 `createMessageObject(input)`
 
-usage: in respondTo
-
 Converts `input` into Brannon's message object (`bmo`). I'm tweaking it to contain affect, intention, and other useful forms.
 Event-based.
 
@@ -30,40 +26,21 @@ Event-based.
 ----
 `extractSyntaxData(bmo)`
 
-Extracts useful n-grams from `bmo.string`.
-
-High-level Description
-1. Extract part-of-speech n-grams for the sentence, subject, object, pos-verbWord-pos
-2. Classify with sentiment and intent
-3. Store, then return n-gram. Json? SQL 4 Server? Write to disk?
-
-Notes for Probability
-
-```
-count(start,[opt: next...]) = counts occurrence of specified sequence
-*# of params decide n-gram n
-
-getProb(feature,[start,feature]) = count(ng-1, ng) / count(ng)
-*The second parameter is the sequence that must be matched. Different for various n-grams.
-*Must be stored as log
-
-```
-
+Extracts useful n-grams from `bmo.string` (sentence, subject, object, pos-verbWord-pos). 
+Categorize by mood quadrant and intent of sentence and store. Json? SQL 4 Server? Write to disk?
 ------------
 
 `extractKnowledgeData(bmo)`
 
-Extracts useful word info. For each word, extract pos,string,sentiment,posBefore,posAfter,sub/v/obj,intent.
-2. Store new word in appropriate database (categorized by pos and sub/v/obj)
-3. Train neural net (on server?) w/ word info
-
-Words are classified by pos and sub/obj/verb
+For each word, extract pos,string,sentiment,posBefore,posAfter,sub/v/obj,intent. 
+Store new word in appropriate database (categorized by pos and sub/v/obj).
+Train neural net (on server?) w/ word info
 
 Nueral Nets Training
 Inputs[sentiment,posBefore,posAfter,intent] Last three are going to be formed as boolean statements
-Output[p(w1), p(w2)...p(wn)] where p(x) is the probability of x between 0-1, and w is a word belonging to the current
+Output[p(w1), p(w2)...p(wn)] where p(x) is the probability of x between 0-1, and w is a word belonging to the current database (specified by mood/intent)
 
-Concerns: Will learning new words throw off the weights/biases of the net? Activation?
+Concerns: Will learning new words throw off the weights/biases of the net?
 
 ------------
 ######Determine Response
@@ -88,7 +65,7 @@ topics[] = array of current topicObjects
     if bmo.getIntent() == intentX
       create new TopicObject(bmo.stuff,intentX)
       
-    create new topic from associtations. look at verbs!!
+    create new topic from associtations. look at verbs!! Knowledge db?
   }
   ```
 --------------
@@ -108,7 +85,7 @@ responseMode = "ansrYN" || "ansrAlt" || "ansrOpen" || "imper" || "declar" || "qu
   ```
 ---------------
 
-responseSentence = [] Populated with `responseWords`
+`responseSentence` = [] Populated with `responseWords`
 ```javascript
   function ResponseWords(pos){
     this.word = "" //placeTopicWords & populateSyntax
