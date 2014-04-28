@@ -5,10 +5,9 @@ Brannon Message Object
 
   Ammendments: sentiment => emoapp, intent, subject/verb/object, stopWord-free
 
-N-Grams. Sequence probability
+N-Grams. 
 
 Neural Net
-Word choice in certain situations
 
 ##Interfaces
 ###User
