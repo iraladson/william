@@ -53,12 +53,9 @@ getProb(feature,[start,feature]) = count(ng-1, ng) / count(ng)
 
 `extractKnowledgeData(bmo)`
 
-Extracts useful word info
-
-High-Level Description
-1. For each word, extract info (pos,string,sentiment,pos<<,pos>>,sub/v/obj,intent)
-2. Store new word in appropriate database (defined by pos and sub/v/obj)
-3. Train nn on server w/ word info
+Extracts useful word info. For each word, extract pos,string,sentiment,posBefore,posAfter,sub/v/obj,intent.
+2. Store new word in appropriate database (categorized by pos and sub/v/obj)
+3. Train neural net (on server?) w/ word info
 
 Words are classified by pos and sub/obj/verb
 
