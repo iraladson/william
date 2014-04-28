@@ -26,32 +26,27 @@ Event-based.
 ----
 `extractSyntaxData(bmo)`
 
-Extracts useful n-grams from `bmo.string` (sentence, subject, object, pos-verbWord-pos). 
-Categorize by mood quadrant and intent of sentence and store. Json? SQL 4 Server? Write to disk?
+With respect to the bmo.intent, store the pos-sequence. Increment occurance if already stored. 
 ------------
 
 `extractKnowledgeData(bmo)`
 
+For each word, update the co-occurence tables.
+
 For each word, extract pos,string,sentiment,posBefore,posAfter,sub/v/obj,intent. 
-Store new word in appropriate database (categorized by pos and sub/v/obj).
-Train neural net (on server?) w/ word info
 
-Nueral Nets Training
-Inputs[sentiment,posBefore,posAfter,intent] Last three are going to be formed as boolean statements
-Output[p(w1), p(w2)...p(wn)] where p(x) is the probability of x between 0-1, and w is a word belonging to the current database (specified by mood/intent)
-
-Concerns: Will learning new words throw off the weights/biases of the net?
+Train neural net?
 
 ------------
 ######Determine Response
 -----------
 
-topics[] = array of current topicObjects
+topics[] = array of current `TopicObjects`
 
   ```javascript
   function TopicObject(){
     this.str = "topicString"
-    this.svo = "subject" || "object" || other || self
+    this.svo = "subject" || "object" //ueful??
     this.age = increment every turn
     this.pos = "pos"
     this.interest = f(bmo.isdesire() + magnitude) determines interest
@@ -70,11 +65,14 @@ topics[] = array of current topicObjects
   ```
 --------------
 
-responseMode = "ansrYN" || "ansrAlt" || "ansrOpen" || "imper" || "declar" || "questYN" || "questAlt || "questOpen"
+responseMode = "ansrYN" || "ansrAlt" || "ansrOpen" || "imper" || "declar" || "questYN" || "questAlt || "questOpen" || "newWord
   
   ```javascript
     function getResponse(bmo){
       var intent = bmo.getIntent();
+      
+      //check for new vocabulary
+        if so, return newWord
       
       if(intent == questX) return ansrX
       
@@ -100,43 +98,47 @@ responseMode = "ansrYN" || "ansrAlt" || "ansrOpen" || "imper" || "declar" || "qu
 
 switch(responseMode) logic.
 
-1. questX : get topics from questX
+1. newWord : get unknownWord => divert to predesigned questions.
+2. questX : get topics from questX
 2. ansrX : get topic from answrX
 3. declar : get topic that ranks highest in some f(age,intrest) <= possible personality trait
 4. imper: f(age,intrest) <= how does agent respond to 'commands'? not the main factor, but an important one
 
 --------
 
-`formSyntax(responseMode,bmo)`
+`formSyntax(responseMode)`
 
-From the database, get all subject, verb, and object n-gram probabilities (or log(p)) that match the quadrant of the current mood.
-From db, get all the s-v-o p(n-gram) that match the responseMode.
+Return an array of pos sequence syntax that matches the responseMode from the syntax database.
 
-Find and return all the syntax-es(?) that are close in distance in both set of n-grams???? If not, find the n-grams sequences with the highest probabilities that contain the pos of a topic
+`syntaxDB`
 
-//SOMETHING ON VERB SELECTION
-
+```
+{
+  mode : [{ [posSequence0] },
+          { [posSequence1] } ... ]
+}
+```
 
 --------------
 
 `placeTopicWords`
 
-Put topic words in the syntax array in the position specified by pos and svo.
+Place the chosen topic word in the syntax array in the position specified by pos and svo.
 
 --------------
 
 `populateSyntax`
 
-For each position in each syntax condidate run neural net with inputs:
+For each position in each syntax condidate run neuralnet with features:
 
-1. posXbefore i.e. {"N" : 0} , {"V" : 1} ...
-2. posXafter
-3. mood.pleasantness
-4. mood.activation
-5. responseMode i.e {"ansrX" : 1 } ...
-6. ?????word????? too much...too slow
+1. probablitiy that the word appears with the topicWord
+2. probability that the word appears with the sentiment (plesantness / activation)
+3. probability that the word appears with the responseMode
+4. probability that the word appears near the nearby pos
 
-The net outputs `word`. `word`s are categorized by pos and subject, verb, object. relations are trained on a neural net. Store the probability of the word prediction in `responseWord`.
+The word that get the highest probability output is inserted into the `word` property of the `ResponseWord` in question. The probability is stored in the `neurProb` property.
+
+Probabilities are determined by coccurance tables (word vs word), (word vs responseType), (word vs sentiment)
 
 --------------
 
