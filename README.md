@@ -76,7 +76,7 @@ responseMode = "ansrYN" || "ansrAlt" || "ansrOpen" || "imper" || "declar" || "qu
       
       if(intent == questX) return ansrX
       
-      if(intent == ansrX) return random pick betwen imper, declar, and questX
+      if(intent == ansrX) return random pick betwen declar, and questX
 
       return random pick between declar, questX, (and rare imper)
     }
@@ -154,3 +154,7 @@ Return the highest ranked sentence of f(neurProb*,syntaxProb), then some f() to 
 3. collaboration, integration. github?
 4. efficiency?? simulate thinking??
 
+
+bmo.posSequence
+bmo.intent.best
+bmo.stripped (dataextract.update)
