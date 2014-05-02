@@ -1,0 +1,47 @@
+awwww
+yayyy
+yah
+hmm
+hehe
+hahahaha
+lolololol
+wooo
+wow
+ughh
+hah
+ahhh
+ummm
+ohh
+oooh
+oooo
+eww
+woohoo
+woop
+yeee
+uhhh
+egh
+agh
+uhm
+oof
+mmm
+mhmm
+eee
+meh
+grr
+hmph
+argh
+gaa
+gah
+ha
+wa
+err
+zzz
+whooops
+
+/*
+	[{
+		onomatopoeia: "hm",
+		regex: //gi,
+		sentiment: 0
+	}]
+ */

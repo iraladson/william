@@ -1,0 +1,43 @@
+{
+  "name": "William",
+  "version": "0.0.1",
+  "description": "A chatbot",
+  "keywords": [
+    "chatbot",
+    "artificial intelligence",
+    "ai",
+    "emotional appraisal"
+  ],
+  "homepage": "https://github.com/iraladson/william",
+  "bugs": {
+    "url": "http://github.com/brannondorsey/william/issues",
+    "email": "aladso@saic.edu"
+  },
+  "author": "Anthony Ladson (http://anthonyladson.com)",
+  "directories": {
+    "lib": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iraladson/william.git"
+  },
+  "dependencies" : {
+    "argv": "0.0.2",
+    "xml2js": "0.4.1",
+    "request": "2.34.0",
+    "underscore": "1.6.0",
+    "sentiment": "0.2.1",
+    "spellcheck": "0.0.4",
+    "natural": "0.1.26",
+    "wordpos": "0.1.9",
+    "phone": "0.0.6",
+    "wordpos" : "latest"
+  },
+  "engines": {
+    "node": ">=v0.10.0"
+  },
+  "license": {
+    "url": "https://raw.github.com/iraladson/william",
+    "type": "MIT"
+  }
+}

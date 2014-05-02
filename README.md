@@ -138,7 +138,7 @@ For each position in each syntax condidate run neuralnet with features:
 
 The word that get the highest probability output is inserted into the `word` property of the `ResponseWord` in question. The probability is stored in the `neurProb` property.
 
-Probabilities are determined by coccurance tables (word vs word), (word vs responseType), (word vs sentiment)
+Probabilities are determined by coccurance tables (word vs word), (word vs responseType), (word vs sentiment), word total, word vs pos
 
 --------------
 
