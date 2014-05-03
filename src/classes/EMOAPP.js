@@ -644,6 +644,10 @@ EMOAPP.Core = function(){
     var util = new EMOAPP.Util();
     var PosSentence = util.PosSentence;
 
+    this.getUtil = function(){
+        return util
+    }
+
 	//COLLECTIONS
 	//Populated by Components
 	var components = [];

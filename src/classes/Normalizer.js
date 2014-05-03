@@ -81,7 +81,7 @@ Normalizer.prototype.getStopWords = function(sentence) {
 	var stopWords = [];
 	var words = _tokenizer.tokenize(sentence);
 	_.each(words, function(word){
-		if (_stopWordDictionary.indexOf(word) != -1) {
+		if (_stopWordDictionary.indexOf(word.toLowerCase()) != -1) {
 			stopWords.push(word);
 		}
 	});

@@ -36,6 +36,8 @@ MessageObjectGenerator.prototype.getMessageObject = function(config, emoapp, cal
 	messageObj.intent = emoapp.getComponent('Intention').getIntent(false).key;
 	messageObj.mood = emoapp.getMood();
 
+	messageObj.stopWordFree = emoapp.getUtil().removeStopWords(text);
+
 	messageObj.id = _helpers.generateID(40);
 	messageObj.timestamp = timestamp;
 	messageObj.from = _phone(from, '') || from;

@@ -3,12 +3,12 @@ function WilliamResponse(){
 	this.getMode = function(messageObject){
 		var intent = messageObject.intent;
 
-		if(intent == "isQuestYN") return "answrYN"
-		if(intent == "isQuestOpen") return "answrOpen"
-		if(intent == "isQuestAlt") return "answrAlt"
+		if(intent == "isQuestYN") return "isAnswrYN"
+		if(intent == "isQuestOpen") return "isAnswrOpen"
+		if(intent == "isQuestAlt") return "isAnswrAlt"
 
 		var random = Math.random();
-		var selection = ["questYN","questOpen","questAlt","declar","declar","imper"];
+		var selection = ["isQuestYN","isQuestOpen","isQuestAlt","isDeclar","isDeclar","isImper"];
 
 		if((intent == "isAnswerYN") || (intent == "isAnswerAlt") || (intent == "isAnswerOpen")){
 			var rand = Math.floor(random * 5);

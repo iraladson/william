@@ -4,5 +4,5 @@ var william = new William();
 
 william.init();
 
-william.respondTo("this is a sentence.");
-william.respondTo("Is this not sentence?");
+william.respondTo("I do not want to go to school today");
+//william.respondTo("Blu"ß);

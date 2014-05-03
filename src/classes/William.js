@@ -90,9 +90,13 @@ function William(){
 			//set modes and topics
 			responseMode = williamResponse.getMode(messgObj);
 
+			williamTopics.updateTopics(messgObj,desire);
+
+			williamTopics.getSentenceTopics(responseMode);
 		});
 		
 
+		//while(response.length == 0){}
 
 		//_updater(response,sentiment.getSentenceSentiment(response),true,[intent,belief,desire]);
 	}
