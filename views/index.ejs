@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<link rel='stylesheet' href='/stylesheets/william.css' />
+</head>
+<body>
+	<canvas id="William"></canvas>
+		
+	<script src='/javascripts/dist/jquery-1.11.0.min.js'></script>
+	<script src='/javascripts/dist/physics.js'></script>
+	<script src='/javascripts/agent.js'></script>
+	<script src='/javascripts/words.js'></script>
+	<script src='/javascripts/utils.js'></script>	
+	
+  <script>
+  	var vex2col = 0.23;
+
+	var text = "Talk to me";
+
+	var sendmsg2William = function(){
+	  var txt = document.getElementById("textbox1").value;
+	  text= txt; //output.
+	  document.getElementById("textbox1").value = "";
+	};
+
+	  var William = new Agent();  
+	  var inner = new Core(William.getX(),William.getY());
+	  for(var i = 0; i < words.length ; i++){
+		  var w = new Other(i,words[i]);
+		  space.push(w);
+
+		var a = physics.makeAttraction(William.self(),w.self(),strength,minDistance);
+	  }  
+	  /*
+		draw loop
+	  */
+	  var grd=ctx.createRadialGradient(Width/2,Height/2,1,Width/2,Height/2,Width-50);
+	  grd.addColorStop(1,'rgba(30,30,30,1)');
+	  grd.addColorStop(0,"rgba(140,140,140,1)");
+
+  
+	  var render = function() {
+		//refresh background
+		ctx.beginPath();
+		ctx.rect(-1, -1, Width, Height);
+		ctx.fillStyle = grd;
+		ctx.fill();
+
+		for(var i = 0; i < space.length;i++){
+		  var w = space[i];
+	 
+		 //w.display();   
+		  w.closeToAgent(William);
+
+		  //check distance  
+		 if(w.dist(William.self())<40){
+			w.nearA=true;
+		  }
+		  if(w.dist(William.self())>40){
+			w.nearA=false;
+		  }
+	
+		 w.move(); w.label(); 
+		}
+   
+		//update innerpositon
+		inner.self().position = William.self().position;
+		//William.self().position = inner.self().position;
+		William.display();
+		William.move();
+		William.label(text);
+	
+		//drawspring
+		drawSpring();
+		if(inner.children.length !=0){
+		  for(var i =0; i<inner.children.length;i++){
+			var c = inner.children[i];
+			coreDisplay(c);
+		  }
+		}
+
+	  };
+ 
+	  physics.onUpdate(render).play();
+
+	//toggle
+	  canvas.onclick = function(e) {
+		physics.toggle(); 
+	  };
+	  canvas.physics = physics;
+  </script>
+  
+	<div id="info">
+			TALK TO<br>
+		  <u>WILLIAM</u>
+	</div>
+
+	<div id='tb'>
+	<input type="text" size = "50" name="textbox1" id="textbox1" value=""/><input type="submit" onclick="sendmsg2William()">
+	</div>
+</body>
+</html>

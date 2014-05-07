@@ -1519,7 +1519,7 @@ EMOAPP.WilliamDesire = function(){
 
     //grab dependent components
     var componentLinks = [];
-    var dependentComponents = ["Belief"];
+    var dependentComponents = ["Belief","SentimentDetector"];
     
     this.linkComponent = function(id,compo){
         componentLinks[id] = compo;
@@ -1532,26 +1532,22 @@ EMOAPP.WilliamDesire = function(){
     //categories of desires
     var desires = [];
 
-    var desireTiggers = [
-        "good","great","greatest","positive","joy",
-        "awesome","dope","cool","fun","beautiful",
-        "exciting","intresting","pretty","sexy","phenomenal"
-    ];
-
-    var fearTriggers = [
-        "gross","nasty","bad","worse","worst",
-        "weird","dangerous","danger","kill",
-        "ugly","disgusting"
-    ];
-
-    var pFearTriggers = [];
-    var pDesireTriggers = [];
 
     var isTrigger = function(assertion,desire){
-        var trigger = (desire ? desireTiggers : fearTriggers);
+        var triggers;
+        if(desire){
+            triggers = componentLinks["SentimentDetector"].getPos();
+        } else {
+            triggers = componentLinks["SentimentDetector"].getNeg();
+        }
 
-        for (var i = 0; i < trigger.length; i++) {
-            var t = trigger[i];
+        for (var i = 0; i < triggers.length; i++) {
+            var tier = trigger[i];
+
+            for (var j = 0; j < tier.length; j++) {
+                var t = tier[j];
+                if(t == assertion){ return true }
+            };
         };
     }
 
@@ -1633,7 +1629,7 @@ EMOAPP.WilliamDesire = function(){
 
             var belief = componentLinks["Belief"].getBeliefs().general[i];
 
-            //if belief.affirmative is true
+            //if belief.affirmative is true and not a desire
             if((belief.affirmative) && !(isDesire(belief.subject))){
                 //if belief.assertion contains a desireTigger
                 if(isTrigger(belief.assertion, true)){
@@ -1779,17 +1775,17 @@ EMOAPP.SentimentDetector = function(){
         ["dreadful","disgusting","worthless","corrupt","awful","terrible","appalling","atrocious","godawful","rotten","pathetic","useless","severe","grave","dead","putrid","hate"]
     ];
 
-    this.newNeg = function(){
-
+    this.getNeg = function(){
+        return negLex
     }
 
-    this.newPos = function(){
-
+    this.getPos = function(){
+        return posLex
     }
 
     this.update = function(){
-        var beliefs = componentLinks["Belief"].getBeliefs();
-        return beliefs;
+        //var beliefs = componentLinks["Belief"].getBeliefs();
+        //return beliefs;
 
         //for every belief in general
             //if verb is "is"/"am"/"are"/"be" && belief.magnitude > 0.5

@@ -49,13 +49,32 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 
 	this.saveTable = function(){
 
-		fs.writeFile( __dirname+"/tempjson/"+_name + ".json", JSON.stringify(table, null, 4), function(err){
+		fs.writeFile( __dirname+"/json/"+_name + ".json", JSON.stringify(table, null, 4), function(err){
 			if(err) {
 				console.log(err);
 			} else {
 				console.log("JSON saved to " + name);
 			}
 		})
+	}
+
+	this.loadTable = function(){
+		var file = __dirname + "/json/" + name + ".json";
+
+		fs.readFile(file, 'utf8', function (err, data) {
+			if (err) {
+				console.log('Error: ' + err);
+				return;
+			}
+			if(data){
+				var data = JSON.parse(data);
+				table.rows = data.rows;
+
+				for (var i = 0; i < data.columns.length; i++) {
+					self.createColumn(data.columns[i].val);
+				};
+			}
+		});
 	}
 
 	this.extractData = function(string,mode){

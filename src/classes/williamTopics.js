@@ -50,7 +50,8 @@ function WilliamTopics (argument) {
 
 	this.getSentenceTopics = function(responseMode){
 		var collection;
-		responseMode = "isQuestOpen"
+		
+		//responseMode = "isQuestOpen"
 		switch(responseMode){
 			case "isAnswerYN" 	: collection = _getTopics("isQuestYN");
 						break;
@@ -71,7 +72,11 @@ function WilliamTopics (argument) {
 						break;
 		}
 
-		console.log(collection);
+		if(!collection){
+			collection = [];
+		}
+
+		return _getInterestingTopic(collection);
 	}
 }
 
@@ -140,8 +145,7 @@ function _getCollectionOfTopics(intents){
 function _getInterestingTopic(topicsArray){
 	var mostInterestingValue = 0;
 	var mostInterestingIndex = 0;
-
-	for (var i = 0; i < topicsArray.length; i++) {
+	for (var i = topicsArray.length-1; i >= 0; i--) {
 		var topic = topicsArray[i];
 
 		if(topic.interest > mostInterestingValue){
@@ -149,6 +153,10 @@ function _getInterestingTopic(topicsArray){
 		}
 	};
 
+	if(topicsArray[mostInterestingIndex]){
+		return topicsArray[mostInterestingIndex];
+	}
+	
 	return topics[mostInterestingIndex];
 }
 

@@ -1,0 +1,24 @@
+{
+    "dataTable": [
+        {
+            "mode": "isQuestYN",
+            "sequences": [
+                {
+                    "iteration": 11,
+                    "sequence": [
+                        "V",
+                        "P",
+                        "R",
+                        "V",
+                        "T",
+                        "N",
+                        "D",
+                        "N",
+                        "R",
+                        "."
+                    ]
+                }
+            ]
+        }
+    ]
+}

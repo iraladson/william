@@ -1,0 +1,47 @@
+#William {
+  position:relative
+
+}
+#tb{
+  display: block;
+  position:absolute; top:85%; left:35%;
+  margin-bottom:0px;
+  display: inline-block;
+  padding: 10px;
+  border-radius:5px;
+
+  background-color: rgba(0,0,0,0.6);
+
+
+}
+#info{
+  display: block;
+  font-family: Arial Narrow;
+  font-style:italic;
+  font-size: 80px;
+  color:blue;
+  position:absolute; top:20px; left:20px;
+  background-color: #000000;
+  margin-top:0px;
+  opacity: 0.6;
+  display: inline-block;
+  padding: 15px;
+  line-height:1;
+  box-shadow: 20px 20px 10px rgba(0,0,0,0.5);
+
+}
+#floating_text {
+  color:blue;
+  float: left;
+  display: inline-block;
+  background-color: rgba(30,224,10,0.8);
+  padding:0;
+  margin: 0;
+}
+body{
+  margin: 0;
+  padding: 0;
+} 
+p{
+    margin: 0;
+}

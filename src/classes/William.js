@@ -69,6 +69,20 @@ function William(){
 		_setupTables();
 	}
 
+	this.getData = function(string){
+		var message = {
+			to : "agent",
+			from : "other",
+			text: string,
+			timestamp: new Date()
+		};
+
+		//Convert to message Object
+		messageObjGen.getMessageObject(message, model,function(messgObj){
+			_analyzeData(messgObj);
+		});
+	}
+
 	this.respondTo = function(string){
 		var message = {
 			to : "agent",
@@ -77,8 +91,10 @@ function William(){
 			timestamp: new Date()
 		};
 
-		var response = "";
+		var responseString = "";
+		var possibleResponses;
 		var responseMode;
+		var topic;
 
 		_updater(message.text,sentiment.getSentenceSentiment(message.text),false,[intent,belief,desire]);
 
@@ -87,12 +103,22 @@ function William(){
 			//Analyze data
 			_analyzeData(messgObj);
 
-			//set modes and topics
+			//Set modes and topics
 			responseMode = williamResponse.getMode(messgObj);
 
 			williamTopics.updateTopics(messgObj,desire);
 
-			williamTopics.getSentenceTopics(responseMode);
+			topic = williamTopics.getSentenceTopics(responseMode);
+
+			//Construct Sentence
+			_formSyntax(responseMode,possibleResponses)
+
+			for (var i = 0; i < possibleResponses.length; i++) {
+				var possibleResponse = possibleResponses[i].sequence;
+				_placeTopicWord(possibleResponse,topic);
+			};
+
+			
 		});
 		
 
@@ -101,6 +127,60 @@ function William(){
 		//_updater(response,sentiment.getSentenceSentiment(response),true,[intent,belief,desire]);
 	}
 
+}
+
+function _placeTopicWord(response,topic){
+	var svo = "s";
+	var placed = false;
+
+	for (var i = 0; i < response.length; i++) {
+		var responseWord = response[i];
+
+		//change svo
+		if(responseWord.pos == 'V' && svo == 's'){
+			svo = 'v'
+		} else if (responseWord.pos != 'V' && svo == 'v'){
+			svo = 'o'
+		}
+
+		//place word in spot depending on pos + svo
+		if((responseWord.pos == topic.pos) && (svo == topic.svo)){
+			responseWord.word = topic.word;
+		}
+	};
+
+	if(!placed){
+		console.log('NO TOPIC WORD WAS PLACED')
+	}
+}
+
+function _formSyntax(responseMode){
+	var array = [];
+	var sequences = syntaxTable.getTable(responseMode) || [{iteration : 1, sequence : ['N','V','N']}];
+	var total = 0;
+
+	//get total count
+	for (var i = 0; i < sequences.length; i++) {
+		var seq = sequences[i];
+		total += seq.iteration;
+	};
+
+	//for every posSequence
+	for (var i = 0; i < sequences.length; i++) {
+		var seq = sequences[i];
+		var responseSequence = [];
+
+		for (var j = 0; j < seq.sequence.length; j++) {
+			responseSequence.push( new williamResponse.ResponseWord(seq.sequence[j]) );
+		};
+
+		array.push({
+			probability : (seq.iteration/total),
+			sequence : responseSequence
+		});
+	};
+
+	return array;
 }
 
 //~~SETUP~~//
@@ -119,13 +199,19 @@ function _setupTables(){
 
 	var posArray = ["C","D","E","F","I","J","L","M","N","P","R","S","T","U","V","W",",","."]
 	_createColumns(posTable,posArray)
+	_createColumns(posBeforeTable,posArray);
+	_createColumns(posAfterTable,posArray);
 
 	var responseArray = ["isDeclar","isImper","isQuestYN","isQuestOpen","isQuestAlt"];
 	_createColumns(responseModeTable,responseArray)
 
-	_createColumns(posBeforeTable,posArray);
+	syntaxTable.loadTable();
+	wordCountTable.loadTable();
+	posTable.loadTable();
+	posBeforeTable.loadTable();
+	posAfterTable.loadTable();
+	responseMode.loadTable();
 
-	_createColumns(posAfterTable,posArray);
 }
 
 function _createColumns(table,array){
@@ -141,6 +227,13 @@ function _analyzeData(messgObj){
 	responseModeTable.extractData(messgObj.text,messgObj.intent);
 	posBeforeTable.extractData(messgObj.text,messgObj.posSequence);
 	posAfterTable.extractData(messgObj.text,messgObj.posSequence);
+
+	syntaxTable.saveTable();
+	wordCountTable.saveTable();
+	posTable.saveTable();
+	posBeforeTable.saveTable();
+	posAfterTable.saveTable();
+	responseMode.saveTable();
 }
 
 function _updater(sentence,sentiment,self,modules){

@@ -4,16 +4,11 @@ function SyntaxTable(){
 
 	var table = [];
 
-	var jsonForm = { dataTable : table }
+	var jsonForm = function(){ return { dataTable : table } };
 
 	this.extractSyntaxData = function(bmo){
 		var posSequence = bmo.posSequence;
 		var intent = bmo.intent;
-		var sequence = [];
-
-		for(var z = 0; z < posSequence; z += 1){
-			sequence.push(posSequence[z].type);
-		}
 
 
 		for (var i = -1; i < table.length; i++) {
@@ -25,7 +20,7 @@ function SyntaxTable(){
 				for (var j = 0; j < syntaxSequences.length; j++) {
 					var syntaxSequence = syntaxSequences[j];
 
-					if(_compare(syntaxSequence.sequence,sequence)){
+					if(_compare(syntaxSequence.sequence,bmo.posSequence)){
 					
 						syntaxSequence.iteration += 1;
 						break;
@@ -34,7 +29,7 @@ function SyntaxTable(){
 						
 						var seq = {
 							iteration : 1,
-							sequence : sequence
+							sequence : bmo.posSequence
 						}
 
 						syntaxSequences.push(seq);
@@ -49,26 +44,49 @@ function SyntaxTable(){
 				table.push({
 					mode : intent,
 
-					sequences : [{ iteration : 1, sequence : sequence}]
+					sequences : [{ iteration : 1, sequence : bmo.posSequence}]
 				})
 
 				break;
 			}
 		};
-
-		return table;
+		//return table;
 	}
 
 	this.saveTable = function(){
-		var name = 'test.json';
-
-		fs.writeFile(name, JSON.stringify(jsonForm, null, 4), function(err){
+		var name = __dirname + '/json/syntaxTable.json';
+		
+		fs.writeFile(name, JSON.stringify(jsonForm(), null, 4), function(err){
 			if(err) {
 				console.log(err);
 			} else {
 				console.log("JSON saved to " + name);
 			}
 		})
+	}
+
+	this.loadTable = function(){
+		var file = __dirname + "/json/syntaxTable.json";
+
+		fs.readFile(file, 'utf8', function (err, data) {
+			if (err) {
+				console.log('Error: ' + err);
+				return;
+			}
+			if(data){
+				var data = JSON.parse(data);
+				table = data.dataTable;
+			}
+		});
+	}
+
+	this.getTable = function(responseMode){
+		for (var i = 0; i < table.length; i++) {
+			var tab = table[i];
+			if(tab.mode == responseMode){
+				return tab.sequences;
+			}
+		};
 	}
 
 //	return table;
