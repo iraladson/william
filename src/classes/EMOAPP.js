@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var EMOAPP = {};
 
 EMOAPP.AppraisalVar = function(id,br,at){
@@ -193,6 +195,51 @@ EMOAPP.Util = function() {
 
 		return { key : key, value : max }
 	}
+
+
+    this.hasApostIn = function(word){
+        if(word.indexOf("'") != -1){ return true; }
+        
+        return false;
+    }
+
+    this.removeApostFrom = function(sentence){
+        var senArray = sentence.split(" ");
+        var newSen = "";
+        for(var i=0; i<senArray.length;i+=1){
+            if(i != 0) { newSen += " "; }
+            var word = senArray[i];
+            
+            if(that.hasApostIn(word)){
+                if(word.indexOf("n't") != -1){
+                    var s = word.split("n'");
+                    newSen =  newSen + s[0] + " " + "not";
+                    continue;
+                } else {
+                    var s = word.split("'");
+                    newSen = newSen + s[0] + " ";
+                    switch(s[1]){
+                        case "m" : newSen += "am";
+                            break;
+                        case "re" : newSen += "are";
+                            break;
+                        case "s" : newSen += "is";
+                            break;
+                        case "ve" : newSen += "have";
+                            break;
+                        case "d" : newSen += "did";
+                            break;
+                        case "ll" : newSen += "will";
+                    }
+                    continue;
+                }
+            }
+            newSen += word;
+        }
+        return newSen;
+    }
+
+
 
     this.removeStopWords = function(string) {
         var x;
@@ -1269,6 +1316,37 @@ EMOAPP.Belief = function(){
 
     var recentBelief;
 
+    //save + load
+    var beliefJson = function(){ return { aboutSelf : aboutSelf, aboutOther : aboutOther, general : general } };
+
+    this.save = function(){
+        fs.writeFile( __dirname+"/json/beliefs.json", JSON.stringify(beliefJson(), null, 4), function(err){
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("JSON saved to beliefs");
+            }
+        })
+    }
+
+    this.loadTable = function(){
+        var file = __dirname + "/json/beliefs.json";
+
+        fs.readFile(file, 'utf8', function (err, data) {
+            if (err) {
+                console.log('Error: ' + err);
+                return;
+            }
+            if(data){
+                var data = JSON.parse(data);
+                
+                aboutSelf = data.aboutSelf;
+                aboutOther = data.aboutOther;
+                general = data.general;
+            }
+        });
+    }
+
     this.newBelief = function(obj){
         //make sure the sentence is declarative
         var intent = componentLinks["Intention"].getIntentData(obj.sentence);
@@ -1293,7 +1371,11 @@ EMOAPP.Belief = function(){
                 string += " ";
             }
 
-            return util.removeStopWords(string)
+            if(string.length > 0){
+                return util.removeStopWords(string)
+            }else{
+                return ""
+            }
 
         }())
         //find belief
@@ -1320,10 +1402,11 @@ EMOAPP.Belief = function(){
         //a sentiment analyisi shoudl be passed in through 'obj' param
         belief.sentiment = obj.sentiment || 0;
 
+        console.log(svo)
         //find the category of the belief
         var _self = obj.self || true;
-        var subj = svo.s[0].word;
-        var obj = svo.o[0].word;
+        var subj = (svo.s[0] ? svo.s[0].word : "");
+        var obj = (svo.o[0] ? svo.o[0].word : "");
         
         if((subj.toLowerCase() == "i") || (obj.toLowerCase() == "me") || (obj.toLowerCase() == "mine")) {
             belief.subject = "other";
@@ -1532,6 +1615,34 @@ EMOAPP.WilliamDesire = function(){
     //categories of desires
     var desires = [];
 
+    //save + load
+    var desireJson = function(){ return { desires : desires } }
+    this.save = function(){
+        fs.writeFile( __dirname+"/json/desires.json", JSON.stringify(desireJson(), null, 4), function(err){
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("JSON saved to desire");
+            }
+        })
+    }
+
+    this.loadTable = function(){
+        var file = __dirname + "/json/desires.json";
+
+        fs.readFile(file, 'utf8', function (err, data) {
+            if (err) {
+                console.log('Error: ' + err);
+                return;
+            }
+            if(data){
+                var data = JSON.parse(data);
+                
+                desires = data.desires;
+            }
+        });
+    }
+
 
     var isTrigger = function(assertion,desire){
         var triggers;
@@ -1542,7 +1653,7 @@ EMOAPP.WilliamDesire = function(){
         }
 
         for (var i = 0; i < triggers.length; i++) {
-            var tier = trigger[i];
+            var tier = triggers[i];
 
             for (var j = 0; j < tier.length; j++) {
                 var t = tier[j];

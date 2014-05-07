@@ -12,6 +12,9 @@ var messageObjGen = new MessageObjGenerator();
 var williamResponse = new WilliamResponse();
 var williamTopics = new WilliamTopics();
 
+//util
+var util = new EMOAPP.Util();
+
 //Emotion
 var model = new EMOAPP.Core();
 var belief = new EMOAPP.Belief();
@@ -70,6 +73,9 @@ function William(){
 	}
 
 	this.getData = function(string){
+		var string = util.removeApostFrom(string);
+
+		console.log("~~getting Data~~~")
 		var message = {
 			to : "agent",
 			from : "other",
@@ -77,10 +83,25 @@ function William(){
 			timestamp: new Date()
 		};
 
+		_updater(message.text,sentiment.getSentenceSentiment(message.text),false,[intent,belief,desire]);
+
 		//Convert to message Object
 		messageObjGen.getMessageObject(message, model,function(messgObj){
+
 			_analyzeData(messgObj);
 		});
+	}
+
+	this.saveData = function(){
+		syntaxTable.saveTable();
+		wordCountTable.saveTable();
+		posTable.saveTable();
+		posBeforeTable.saveTable();
+		posAfterTable.saveTable();
+		responseModeTable.saveTable();
+
+		belief.save();
+		desire.save();
 	}
 
 	this.respondTo = function(string){
@@ -210,7 +231,7 @@ function _setupTables(){
 	posTable.loadTable();
 	posBeforeTable.loadTable();
 	posAfterTable.loadTable();
-	responseMode.loadTable();
+	responseModeTable.loadTable();
 
 }
 
@@ -227,13 +248,6 @@ function _analyzeData(messgObj){
 	responseModeTable.extractData(messgObj.text,messgObj.intent);
 	posBeforeTable.extractData(messgObj.text,messgObj.posSequence);
 	posAfterTable.extractData(messgObj.text,messgObj.posSequence);
-
-	syntaxTable.saveTable();
-	wordCountTable.saveTable();
-	posTable.saveTable();
-	posBeforeTable.saveTable();
-	posAfterTable.saveTable();
-	responseMode.saveTable();
 }
 
 function _updater(sentence,sentiment,self,modules){

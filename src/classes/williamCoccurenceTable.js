@@ -1,4 +1,7 @@
 var fs = require('fs');
+var emoapp = require("./EMOAPP.js");
+
+var util = new emoapp.Util();
 
 function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 	var self = this;
@@ -48,7 +51,6 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 	}
 
 	this.saveTable = function(){
-
 		fs.writeFile( __dirname+"/json/"+_name + ".json", JSON.stringify(table, null, 4), function(err){
 			if(err) {
 				console.log(err);
@@ -79,6 +81,14 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 
 	this.extractData = function(string,mode){
 		var input = string.split(" ");
+
+		//clean up data
+		//remove punctuation
+		if(util.hasPunct(input[input.length-1])){
+			var s = input[input.length-1];
+			input[input.length-1] = s.substring(s.length-1, s.length);
+		}
+
 		var columnFilter;
 
 		if(typeof mode == "object" && mode.length){
@@ -129,7 +139,7 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 
 	var _addCells = function(ipt,set,func){
 		for (var i = 0; i < ipt.length; i++) {
-			var word = ipt[i];
+			var word = ipt[i].toLowerCase();
 
 			for (var j = -1; j < set.length; j++) {
 				var element = set[j];

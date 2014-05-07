@@ -1,5 +1,39 @@
 var fs = require("fs");
+var William = require("./src/classes/William.js");
 
+//DATASET TRAINING
+var dataset;
+
+var william = new William();
+william.init();
+
+var loadTable = function(name){
+	var file = __dirname + "/src/classes/trainJson/" + name + ".json";
+
+	fs.readFile(file, 'utf8', function (err, data) {
+		if (err) {
+			console.log('Error: ' + err);
+			return;
+		}
+		var dataA = JSON.parse(data);
+		dataset = dataA.chatText;
+		getData();
+		william.saveData();
+	});
+}
+
+var getData = function(){
+	for (var i = 0; i < dataset.length; i++) {
+		var data = dataset[i];
+
+		william.getData(data);
+	};
+}
+
+loadTable('testTrain')
+
+
+/*LOADING SENTECES TO JSON
 var bible;
 var bibleText = {};
 
@@ -24,12 +58,21 @@ var getText = function(){
 	
 	for (var i = 0; i < bible.length; i++) {
 		var verse = bible[i];
-		if(verse.text == "" || verse.text == " "){
-			console.log("continued") 
-			continue; 
-		} else {
-			text.push(verse.text.trim());
-		}
+		var txt = verse.text.trim().split(".")
+
+		for (var j = 0; j < txt.length; j++) {
+			var t = txt[j];
+
+			if(t == "" || t == " "){
+				console.log("continued") 
+				continue; 
+			} else {
+
+				text.push(t.trim());
+			}
+
+
+		};
 	};
 	
 	bibleText.texts = text;
@@ -78,4 +121,4 @@ var getText1 = function(name){
 	});
 }
 
-loadTable("bible");
+loadTable("bible");*/
