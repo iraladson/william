@@ -28,7 +28,7 @@ var getText = function(){
 			console.log("continued") 
 			continue; 
 		} else {
-			text.push(verse.text);
+			text.push(verse.text.trim());
 		}
 	};
 	
@@ -68,7 +68,7 @@ var getText1 = function(name){
 
 			if(line[1] == null || line[1] == "<Laughter>" || line[1] == "<Laughter> ." || line[1] == "<lipsmack>" || line[1] == "<breathing>" || line[1].indexOf("--") != -1) continue
 
-			text.push(line[1]);
+			text.push(line[1].trim());
 		};
 
 		bibleText.chatText = text;
