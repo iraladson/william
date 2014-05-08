@@ -61,6 +61,18 @@ var posAfterTable = new CoccurenceTable("posAfterTable",false,true,function(row,
 	}
 })
 
+var wordCoccurTable = new CoccurenceTable("wordCoccur",false,false,function(row,column,input,colFilter,colNumb){
+	var rWord = row.val;
+
+	for (var i = 0; i < input.length; i++) {
+		var word = input[i];
+
+		if(word == rWord && i != colNumb){
+			return true;
+		}
+	};
+})
+
 
 //------------------------------//
 
@@ -72,10 +84,14 @@ function William(){
 		_setupTables();
 	}
 
+	var i = 0;
+
 	this.getData = function(string){
 		var string = util.removeApostFrom(string);
 
-		console.log("~~getting Data~~~")
+		console.log(i);
+		i+=1;
+		
 		var message = {
 			to : "agent",
 			from : "other",
@@ -93,15 +109,16 @@ function William(){
 	}
 
 	this.saveData = function(){
-		syntaxTable.saveTable();
+		/*syntaxTable.saveTable();
 		wordCountTable.saveTable();
 		posTable.saveTable();
 		posBeforeTable.saveTable();
 		posAfterTable.saveTable();
-		responseModeTable.saveTable();
+		responseModeTable.saveTable();*/
+		wordCoccurTable.saveTable();
 
-		belief.save();
-		desire.save();
+		/*belief.save();
+		desire.save();*/
 	}
 
 	this.respondTo = function(string){
@@ -232,6 +249,7 @@ function _setupTables(){
 	posBeforeTable.loadTable();
 	posAfterTable.loadTable();
 	responseModeTable.loadTable();
+	wordCoccurTable.loadTable();
 
 }
 
@@ -242,12 +260,13 @@ function _createColumns(table,array){
 }
 
 function _analyzeData(messgObj){
-	syntaxTable.extractSyntaxData(messgObj);
+	/*syntaxTable.extractSyntaxData(messgObj);
 	wordCountTable.extractData(messgObj.text);
 	posTable.extractData(messgObj.text,messgObj.posSequence);
 	responseModeTable.extractData(messgObj.text,messgObj.intent);
 	posBeforeTable.extractData(messgObj.text,messgObj.posSequence);
-	posAfterTable.extractData(messgObj.text,messgObj.posSequence);
+	posAfterTable.extractData(messgObj.text,messgObj.posSequence);*/
+	wordCoccurTable.extractData(messgObj.text,messgObj.posSequence);
 }
 
 function _updater(sentence,sentiment,self,modules){

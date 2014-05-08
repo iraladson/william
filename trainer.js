@@ -1,5 +1,7 @@
 var fs = require("fs");
+var parseString = require("xml2js").parseString;
 var William = require("./src/classes/William.js");
+
 
 //DATASET TRAINING
 var dataset;
@@ -16,13 +18,17 @@ var loadTable = function(name){
 			return;
 		}
 		var dataA = JSON.parse(data);
-		dataset = dataA.chatText;
-		getData();
+		dataset = dataA;
+
+		getData(dataset.bible)
+		william.saveData();
+
+		getData(dataset.chatText);
 		william.saveData();
 	});
 }
 
-var getData = function(){
+var getData = function(dataset){
 	for (var i = 0; i < dataset.length; i++) {
 		var data = dataset[i];
 
@@ -30,15 +36,14 @@ var getData = function(){
 	};
 }
 
-loadTable('testTrain')
+loadTable('trainingText')
 
 
-/*LOADING SENTECES TO JSON
-var bible;
+/*/LOADING SENTECES TO JSON
 var bibleText = {};
 
 var loadTable = function(name){
-	var file = __dirname + "/src/classes/trainJson/" + name + ".json";
+	var file = __dirname + "/src/classes/trainJson/" + name + ".txt";
 
 	fs.readFile(file, 'utf8', function (err, data) {
 		if (err) {
@@ -46,10 +51,11 @@ var loadTable = function(name){
 			return;
 		}
 		
-		var data = JSON.parse(data);
-		bible = data.bible;
+		var dataArray = data.split("\",\n\"")
+		bibleText.bible = dataArray;		
 		
-		getText();
+		getText1()
+		//saveTable("trainingText");
 	});
 }
 
@@ -91,8 +97,11 @@ var saveTable = function(name){
 	})
 }
 
-var getText1 = function(name){
-	var file = __dirname + "/src/classes/trainJson/" + name;
+/*var getText1 = function(){
+
+	var text = [];
+
+	var file = __dirname + "/src/classes/trainJson/train.xml";
 
 	fs.readFile(file, 'utf8', function (err, data) {
 		if (err) {
@@ -100,7 +109,20 @@ var getText1 = function(name){
 			return;
 		}
 
-		var text = []
+		parseString(data,function(err,result){
+			for (var i = 0; i < result.conversations.conversation.length; i++) {
+				var message = result.conversations.conversation[i].message;
+
+				for (var j = 0; j < message.length; j++) {
+					if((message[j].text[0].indexOf(":") == -1) && (message[j].text[0].indexOf("+") == -1) && (message[j].text[0].indexOf("-") == -1) && (message[j].text[0].indexOf("&") == -1) && (message[j].text[0].indexOf("/") == -1) && (message[j].text[0].indexOf("[") == -1) && (message[j].text[0].indexOf(")") == -1) && (message[j].text[0].indexOf("..") == -1) && (message[j].text[0].indexOf("\"") == -1))
+					text.push(message[j].text[0]);
+				};
+			};
+			bibleText.chatText = text;
+			saveTable("trainingText");
+		});*/
+		
+		/*var text = []
 		
 		var dataA = data.split("\n");
 

@@ -68,6 +68,7 @@ EMOAPP.Util = function() {
 
 		this.PosSentence = function(theInput){
 			var words = new Lexer().lex(theInput);
+            //console.log(words);
 			var taggedWords = new POSTagger().tag(words);
 			
 			this.specialSentence = [];
@@ -952,9 +953,13 @@ POSTagger.prototype.tag = function(words){
     var ret = new Array(words.length);
     for (var i = 0, size = words.length; i < size; i++) {
         var ss = this.lexicon[words[i]];
+        //console.log(words[i]);
+
         // 1/22/2002 mod (from Lisp code): if not in hash, try lower case:
         if (!ss) 
             ss = this.lexicon[words[i].toLowerCase()];
+        if(typeof ss == "function") 
+            ss = undefined;
         if (!ss && words[i].length == 1) 
             ret[i] = words[i] + "^";
         if (!ss) 
@@ -1402,7 +1407,6 @@ EMOAPP.Belief = function(){
         //a sentiment analyisi shoudl be passed in through 'obj' param
         belief.sentiment = obj.sentiment || 0;
 
-        console.log(svo)
         //find the category of the belief
         var _self = obj.self || true;
         var subj = (svo.s[0] ? svo.s[0].word : "");
@@ -1569,15 +1573,15 @@ EMOAPP.Belief = function(){
         if(!word) return
 
         var sum = 0;
-
-        for (var i = 0; i < general.length; i++) {
-            var sub = general[i].subject.toLowerCase();
-            
-            if(sub.indexOf(subject.toLowerCase()) != -1){
-                sum += 1;
-            }
-        };
-
+        if(subject){
+            for (var i = 0; i < general.length; i++) {
+                var sub = general[i].subject.toLowerCase();
+                
+                if(sub.indexOf(subject.toLowerCase()) != -1){
+                    sum += 1;
+                }
+            };
+        }
         return sum;
     }
 
@@ -1715,7 +1719,7 @@ EMOAPP.WilliamDesire = function(){
         for (var i = 0; i < desires.length; i++) {
             var desire = desires[i];
 
-            if(desire.param.trim().toLowerCase() == param.trim().toLowerCase()){
+            if(desire.param && desire.param.trim().toLowerCase() == param.trim().toLowerCase()){
                 return desire
             }
         };
