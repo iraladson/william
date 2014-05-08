@@ -48,6 +48,10 @@ function WilliamTopics (argument) {
 		};
 	}
 
+	this.clearTopics = function(){
+		topics = [];
+	}
+
 	this.getSentenceTopics = function(responseMode){
 		var collection;
 		

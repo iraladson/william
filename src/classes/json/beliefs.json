@@ -996,7 +996,7 @@
         },
         {
             "verb": "do",
-            "assertion": ", lol",
+            "assertion": "lol",
             "subject": "self",
             "affirmative": true,
             "sentiment": 0
@@ -1598,7 +1598,7 @@
         },
         {
             "verb": "know",
-            "assertion": ", pants cumming",
+            "assertion": "pants cumming",
             "subject": "self",
             "affirmative": true,
             "sentiment": 0
@@ -1626,7 +1626,7 @@
         },
         {
             "verb": "know",
-            "assertion": ", tight",
+            "assertion": "tight",
             "subject": "self",
             "affirmative": true,
             "sentiment": 0
@@ -1780,7 +1780,7 @@
         },
         {
             "verb": "know",
-            "assertion": ", expect help comes",
+            "assertion": "expect help comes",
             "subject": "self",
             "affirmative": true,
             "sentiment": 0
@@ -2944,7 +2944,7 @@
         },
         {
             "verb": "am",
-            "assertion": ", truth , life",
+            "assertion": "truth , life",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0
@@ -4561,7 +4561,7 @@
         },
         {
             "verb": "looked",
-            "assertion": ", land line auburn",
+            "assertion": "land line auburn",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0
@@ -5170,7 +5170,7 @@
         },
         {
             "verb": "know",
-            "assertion": ", sex website",
+            "assertion": "sex website",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0
@@ -5947,7 +5947,7 @@
         },
         {
             "verb": "know",
-            "assertion": ", thats i you excited geeze lol",
+            "assertion": "thats i you excited geeze lol",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0.6666666666666666
@@ -6451,7 +6451,7 @@
         },
         {
             "verb": "warn",
-            "assertion": ", lots traffic louisville",
+            "assertion": "lots traffic louisville",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0
@@ -6682,7 +6682,7 @@
         },
         {
             "verb": "tell",
-            "assertion": ", i",
+            "assertion": "i",
             "subject": "other",
             "affirmative": true,
             "sentiment": -0.3333333333333333
@@ -6878,7 +6878,7 @@
         },
         {
             "verb": "have",
-            "assertion": ", working computer moment , i lost cd",
+            "assertion": "working computer moment , i lost cd",
             "subject": "other",
             "affirmative": false,
             "sentiment": 0
@@ -7431,7 +7431,7 @@
         },
         {
             "verb": "enjoyed",
-            "assertion": ", i like guys cum mouth",
+            "assertion": "i like guys cum mouth",
             "subject": "other",
             "affirmative": true,
             "sentiment": 0
@@ -13726,7 +13726,7 @@
         },
         {
             "verb": "says",
-            "assertion": ", meh ,",
+            "assertion": "meh ,",
             "subject": "",
             "affirmative": true,
             "sentiment": 0
@@ -13768,7 +13768,7 @@
         },
         {
             "verb": "is",
-            "assertion": ", i i hang hours",
+            "assertion": "i i hang hours",
             "subject": "",
             "affirmative": true,
             "sentiment": 0
@@ -14126,7 +14126,7 @@
         {
             "verb": "want",
             "assertion": "change requestreadtimeout",
-            "subject": ", particular i",
+            "subject": "particular i",
             "affirmative": true,
             "sentiment": 0
         },
@@ -14308,7 +14308,7 @@
         {
             "verb": "get",
             "assertion": "suspicious",
-            "subject": ", ur dad",
+            "subject": "ur dad",
             "affirmative": true,
             "sentiment": 0
         },
@@ -14616,7 +14616,7 @@
         {
             "verb": "have",
             "assertion": "gut feeling silent ws leave implementation detail",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": true,
             "sentiment": 0
         },
@@ -14699,7 +14699,7 @@
         },
         {
             "verb": "interpret",
-            "assertion": ", clip overflow viewport",
+            "assertion": "clip overflow viewport",
             "subject": "you",
             "affirmative": false,
             "sentiment": 0
@@ -15658,7 +15658,7 @@
         },
         {
             "verb": "want",
-            "assertion": ", i satisfy ur demand",
+            "assertion": "i satisfy ur demand",
             "subject": "you",
             "affirmative": true,
             "sentiment": 0.3333333333333333
@@ -16141,7 +16141,7 @@
         },
         {
             "verb": "sucks",
-            "assertion": ", im cigar smoker , lol , thats im lookin humidor",
+            "assertion": "im cigar smoker , lol , thats im lookin humidor",
             "subject": "",
             "affirmative": true,
             "sentiment": -0.3333333333333333
@@ -17024,7 +17024,7 @@
         {
             "verb": "give",
             "assertion": "time",
-            "subject": ", ur 13 ,",
+            "subject": "ur 13 ,",
             "affirmative": true,
             "sentiment": 0
         },
@@ -17339,14 +17339,14 @@
         {
             "verb": "used",
             "assertion": "you you care ,",
-            "subject": ", you",
+            "subject": "you",
             "affirmative": false,
             "sentiment": 0
         },
         {
             "verb": "see",
             "assertion": "i kruft adding attributes i clean",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": true,
             "sentiment": 0.3333333333333333
         },
@@ -17521,7 +17521,7 @@
         {
             "verb": "am",
             "assertion": "assumption insensitive unless",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": false,
             "sentiment": 0
         },
@@ -17576,7 +17576,7 @@
         },
         {
             "verb": "say",
-            "assertion": ", , i didnt you",
+            "assertion": "i didnt you",
             "subject": "awww thats nice you",
             "affirmative": true,
             "sentiment": 0.43333333333333335
@@ -17996,7 +17996,7 @@
         },
         {
             "verb": "finds",
-            "assertion": ", i am sick",
+            "assertion": "i am sick",
             "subject": "ur mom",
             "affirmative": true,
             "sentiment": 0
@@ -18361,7 +18361,7 @@
         {
             "verb": "am",
             "assertion": "cop playa",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": false,
             "sentiment": 0.3333333333333333
         },
@@ -18669,7 +18669,7 @@
         {
             "verb": "agrees",
             "assertion": "change based your argument you included",
-            "subject": ", editor",
+            "subject": "editor",
             "affirmative": true,
             "sentiment": 0
         },
@@ -19284,7 +19284,7 @@
         },
         {
             "verb": "be",
-            "assertion": ", i",
+            "assertion": "i",
             "subject": ",",
             "affirmative": true,
             "sentiment": 0.3333333333333333
@@ -19725,7 +19725,7 @@
         },
         {
             "verb": "mouth",
-            "assertion": ", your pussy , your ass",
+            "assertion": "your pussy , your ass",
             "subject": "your",
             "affirmative": true,
             "sentiment": 0
@@ -19956,7 +19956,7 @@
         },
         {
             "verb": "saw",
-            "assertion": ", adam barth pretty forward ietf , i am leaves cors",
+            "assertion": "adam barth pretty forward ietf , i am leaves cors",
             "subject": "i",
             "affirmative": false,
             "sentiment": 0.3333333333333333
@@ -20104,7 +20104,7 @@
         {
             "verb": "think",
             "assertion": "im gonna bit",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": true,
             "sentiment": 0
         },
@@ -20446,14 +20446,14 @@
         },
         {
             "verb": "feels",
-            "assertion": ", your dick",
+            "assertion": "your dick",
             "subject": "oh god",
             "affirmative": true,
             "sentiment": 0.43333333333333335
         },
         {
             "verb": "cumming",
-            "assertion": ", your cock , feels !",
+            "assertion": "your cock , feels !",
             "subject": "oh god im",
             "affirmative": true,
             "sentiment": 0
@@ -20789,7 +20789,7 @@
         },
         {
             "verb": "knew",
-            "assertion": ", ur horny lil 13",
+            "assertion": "ur horny lil 13",
             "subject": "yep i",
             "affirmative": true,
             "sentiment": 0.3333333333333333
@@ -20838,14 +20838,14 @@
         },
         {
             "verb": "is",
-            "assertion": ", i politically like odf , reading spec makes hixie treatment",
+            "assertion": "i politically like odf , reading spec makes hixie treatment",
             "subject": "",
             "affirmative": true,
             "sentiment": 0
         },
         {
             "verb": "did",
-            "assertion": ", yes , consulting community",
+            "assertion": "yes , consulting community",
             "subject": "basically",
             "affirmative": true,
             "sentiment": 0.3333333333333333
@@ -20866,7 +20866,7 @@
         },
         {
             "verb": "did",
-            "assertion": ", you able aliases supported server browser",
+            "assertion": "you able aliases supported server browser",
             "subject": "",
             "affirmative": false,
             "sentiment": 0
@@ -21070,7 +21070,7 @@
         {
             "verb": "think",
             "assertion": "im gonna lil bit , ill",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": true,
             "sentiment": 0
         },
@@ -21125,7 +21125,7 @@
         },
         {
             "verb": "meet",
-            "assertion": ", ok",
+            "assertion": "ok",
             "subject": "sex ist time",
             "affirmative": true,
             "sentiment": 0.3333333333333333
@@ -21426,7 +21426,7 @@
         },
         {
             "verb": "sit",
-            "assertion": ", change",
+            "assertion": "change",
             "subject": "you",
             "affirmative": true,
             "sentiment": 0
@@ -21861,7 +21861,7 @@
         {
             "verb": "wanted",
             "assertion": "you change your mind i",
-            "subject": ", i",
+            "subject": "i",
             "affirmative": true,
             "sentiment": 0
         },
@@ -22057,7 +22057,7 @@
         {
             "verb": "are",
             "assertion": "awesome , i swear",
-            "subject": ", you guys",
+            "subject": "you guys",
             "affirmative": true,
             "sentiment": 0
         },

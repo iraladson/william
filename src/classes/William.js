@@ -6,6 +6,7 @@ var SyntaxTable = require("./williamSyntaxTable.js");
 var CoccurenceTable = require("./williamCoccurenceTable.js");
 var WilliamResponse = require("./williamResponse.js");
 var WilliamTopics = require("./williamTopics.js");
+var NeuralNet = require("./williamWordPicker.js");
 
 //Forms
 var messageObjGen = new MessageObjGenerator();
@@ -72,6 +73,37 @@ var wordCoccurTable = new CoccurenceTable("wordCoccur",false,false,function(row,
 		}
 	};
 })
+
+var _getTablesAsArray = function(){
+	return [posBeforeTable,posAfterTable,responseModeTable]
+}
+
+var _getCount = function(){
+	return wordCountTable
+}
+
+//nn
+var cNN = new NeuralNet("C");
+var dNN = new NeuralNet("D");
+var eNN = new NeuralNet("E");
+var fNN = new NeuralNet("F");
+var iNN = new NeuralNet("I");
+var jNN = new NeuralNet("J");
+var lNN = new NeuralNet("L");
+var mNN = new NeuralNet("M");
+var nNN = new NeuralNet("N");
+var pNN = new NeuralNet("P");
+var rNN = new NeuralNet("R");
+var sNN = new NeuralNet("S");
+var tNN = new NeuralNet("T");
+var uNN = new NeuralNet("U");
+var vNN = new NeuralNet("V");
+var wNN = new NeuralNet("W");
+var commaNN = new NeuralNet(",");
+var periodNN = new NeuralNet(".");
+var eclamNN = new NeuralNet("!");
+
+var nets = [cNN,dNN,eNN,fNN,iNN,jNN,lNN,mNN,nNN,pNN,rNN,sNN,tNN,uNN,vNN,wNN,commaNN,periodNN,eclamNN];
 
 
 //------------------------------//
@@ -149,24 +181,145 @@ function William(){
 			topic = williamTopics.getSentenceTopics(responseMode);
 
 			//Construct Sentence
-			_formSyntax(responseMode,possibleResponses)
+			possibleResponses = _formSyntax(responseMode);
 
 			for (var i = 0; i < possibleResponses.length; i++) {
+				//if(i > 0) break;
 				var possibleResponse = possibleResponses[i].sequence;
 				_placeTopicWord(possibleResponse,topic);
-			};
 
+				for (var x = 0; x < possibleResponse.length; x++) {
+					var responseWord = possibleResponse[x];
+					if(responseWord.word == topic.word) { continue; }
+
+					var net = _getNet(responseWord.pos);
+					var wordCollection = posTable.getRowsByColumn(responseWord.pos);
+					var posBefore = (possibleResponse[x-1] ? possibleResponse[x-1].pos : "")
+					var posAfter = (possibleResponse[x+1] ? possibleResponse[x+1].pos : "")
+					var data = net.pickWord(wordCollection,[posBefore,posAfter,responseMode],_getTablesAsArray,_getCount);
+
+					possibleResponses[i].sequence[x].word = data.word;
+					possibleResponses[i].sequence[x].neuroProb = data.prob;
+				};
+
+			};
+			
+			//Cleanup
+			//console.log(possibleResponses[0]);
+			var possibleStrings = _getStrings(possibleResponses);
+			console.log(possibleStrings);
+
+			responseString = possibleStrings[0];
+
+			//give response string back!!
 			
 		});
-		
-
-		//while(response.length == 0){}
 
 		//_updater(response,sentiment.getSentenceSentiment(response),true,[intent,belief,desire]);
 	}
 
+	this.train = function(trainingSentences){
+		for (var i = 0; i < trainingSentences.length; i++) {
+			var sentence = trainingSentences[i];
+
+			var message = {
+				to : "agent",
+				from : "other",
+				text: sentence,
+				timestamp: new Date()
+			}
+
+			var responseMode;
+			var topic;
+			var response;
+
+			_updater(message.text,sentiment.getSentenceSentiment(message.text),false,[intent,belief,desire]);
+
+			messageObjGen.getMessageObject(message, model,function(messgObj){
+				_analyzeData(messgObj);
+
+				//Set modes and topics
+				williamTopics.clearTopics();
+
+				williamTopics.updateTopics(messgObj,desire);
+
+				topics = williamTopics.getTopics();
+
+				response = _formTrainingResponse(messgObj);
+
+				for (var j = 0; j < topics.length; j++) {
+					var topic = topics[j];
+
+					for (var x = 0; x < response.length; x++) {
+						var responseWord = response[x];
+						if(responseWord.word == topic.word) { break; }
+
+						var net = _getNet(responseWord.pos);
+						var wordCollection = posTable.getRowsByColumn(responseWord.pos);
+						var posBefore = (response[x-1] ? response[x-1].pos : "")
+						var posAfter = (response[x+1] ? response[x+1].pos : "")
+						net.train(wordCollection,[posBefore,posAfter,messgObj.intent,topic.word],responseWord.word);
+					};
+				};
+			});
+
+		};
+	}
+
 }
 
+function _getStrings(possibleResponses){
+	var output = [];
+
+	for (var i = 0; i < possibleResponses.length; i++) {
+		var pr = possibleResponses[i].sequence;
+		var s = "";
+
+		for (var j = 0; j < pr.length; j++) {
+			var responseWord = pr[j];
+			
+			if(j != 0 || j != pr.length-1){
+				s += " "
+			}
+
+			s += responseWord.word;
+		};
+
+		output.push(s);
+	};
+
+	return output
+}
+
+
+//training
+function _formTrainingResponse(bmo){
+	var output = [];
+	var words = bmo.sentences[0].words
+
+	for (var i = 0; i < words.length; i++) {
+		var word = words[i];
+		var pos = bmo.posSequence[i];
+
+		output.push(new williamResponse.ResponseWord(pos));
+		output[i].word = word;
+	};
+
+	return output;
+}
+
+//
+function _getNet(pos){
+
+	for (var i = 0; i < nets.length; i++) {
+		var net = nets[i];
+		if(net.getId() == pos){
+			return net
+		}
+	};
+	console.log(pos);
+	console.log("no net found in getNet()")
+}
 function _placeTopicWord(response,topic){
 	var svo = "s";
 	var placed = false;
@@ -184,6 +337,7 @@ function _placeTopicWord(response,topic){
 		//place word in spot depending on pos + svo
 		if((responseWord.pos == topic.pos) && (svo == topic.svo)){
 			responseWord.word = topic.word;
+			placed = true;
 		}
 	};
 
@@ -207,15 +361,17 @@ function _formSyntax(responseMode){
 	for (var i = 0; i < sequences.length; i++) {
 		var seq = sequences[i];
 		var responseSequence = [];
+		
+		if(seq.iteration > 1 || responseMode == "isQuestAlt"){
+			for (var j = 0; j < seq.sequence.length; j++) {
+				responseSequence.push( new williamResponse.ResponseWord(seq.sequence[j]) );
+			};
 
-		for (var j = 0; j < seq.sequence.length; j++) {
-			responseSequence.push( new williamResponse.ResponseWord(seq.sequence[j]) );
-		};
-
-		array.push({
-			probability : (seq.iteration/total),
-			sequence : responseSequence
-		});
+			array.push({
+				probability : (seq.iteration/total),
+				sequence : responseSequence
+			});
+		}
 	};
 
 	return array;
@@ -266,7 +422,7 @@ function _analyzeData(messgObj){
 	responseModeTable.extractData(messgObj.text,messgObj.intent);
 	posBeforeTable.extractData(messgObj.text,messgObj.posSequence);
 	posAfterTable.extractData(messgObj.text,messgObj.posSequence);*/
-	wordCoccurTable.extractData(messgObj.text,messgObj.posSequence);
+	wordCoccurTable.extractData(messgObj.text);
 }
 
 function _updater(sentence,sentiment,self,modules){

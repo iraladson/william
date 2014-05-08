@@ -81,6 +81,7 @@ function SyntaxTable(){
 	}
 
 	this.getTable = function(responseMode){
+		console.log(responseMode)
 		for (var i = 0; i < table.length; i++) {
 			var tab = table[i];
 			if(tab.mode == responseMode){

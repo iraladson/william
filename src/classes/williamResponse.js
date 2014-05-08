@@ -3,9 +3,9 @@ function WilliamResponse(){
 	this.getMode = function(messageObject){
 		var intent = messageObject.intent;
 
-		if(intent == "isQuestYN") return "isAnswrYN"
-		if(intent == "isQuestOpen") return "isAnswrOpen"
-		if(intent == "isQuestAlt") return "isAnswrAlt"
+		if(intent == "isQuestYN") return "isDeclar"//"isAnswrYN"
+		if(intent == "isQuestOpen") return "isDeclar"//"isAnswrOpen"
+		if(intent == "isQuestAlt") return "isDeclar"//"isAnswrAlt"
 
 		var random = Math.random();
 		var selection = ["isQuestYN","isQuestOpen","isQuestAlt","isDeclar","isDeclar","isImper"];

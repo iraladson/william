@@ -22,6 +22,48 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 		console.log(table.columns);
 	}
 
+	this.getValue = function(wordVector){
+		for (var i = 0; i < table.rows.length; i++) {
+			var row = table.rows[i];
+
+			if(row.val == wordVector[0]){
+				for (var j = 0; j < table.columns.length; j++) {
+					var column = table.columns[j];
+
+					if(column.val == wordVector[1]){
+						return row.row[column.id]
+					}
+				};
+			}
+		};
+
+		//console.log("no value found in getValue(wordVector)")
+		return 0
+	}
+
+	this.getRowsByColumn = function(column){
+		var id;
+		var output = [];
+
+		for (var i = 0; i < table.columns.length; i++) {
+			var _column = table.columns[i];
+			if(_column.val == column){
+				id = _column.id;
+				break;
+			}
+		};
+
+		for (var i = 0; i < table.rows.length; i++) {
+			var row = table.rows[i];
+
+			if(row.row[id] > 0){
+				output.push(row.val);
+			}
+		};
+
+		return output;
+	}
+
 	this.createRow = function(val){
 		table.rows.push({
 			val : val,
@@ -69,12 +111,17 @@ function CoccurenceTable(name,rowsFixed,columnsFixed,incrementFunc){
 				return;
 			}
 			if(data){
-				var data = JSON.parse(data);
-				table.rows = data.rows;
+
+				var data = JSON.parse(data);				
 
 				for (var i = 0; i < data.columns.length; i++) {
 					self.createColumn(data.columns[i].val);
 				};
+
+				table.rows = data.rows;
+
+				console.log(name + " table loaded!")
+				
 			}
 		});
 	}
